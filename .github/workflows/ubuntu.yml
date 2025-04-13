@@ -1,0 +1,28 @@
+name: Ubuntu VDS
+
+on: workflow_dispatch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: VDS Başlat
+      uses: actions/checkout@v2
+    
+    - name: Tmate Kurulumu
+      run: |
+        sudo apt update
+        sudo apt install tmate -y
+        
+    - name: Tmate Oturumu Başlat
+      run: |
+        tmate -S /tmp/tmate.sock new-session -d
+        tmate -S /tmp/tmate.sock wait tmate-ready
+        tmate -S /tmp/tmate.sock display -p '#{tmate_ssh}'
+        
+    - name: VDS'i Çalışır Tutma
+      run: |
+        while true; do
+          sleep 60
+          tmate -S /tmp/tmate.sock display -p '#{tmate_ssh}'
+        done
