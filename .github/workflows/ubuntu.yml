@@ -1,28 +1,37 @@
-name: Ubuntu VDS
 
-on: workflow_dispatch
+
+name: Ubuntu
+
+on:
+  workflow_dispatch:
 
 jobs:
-  build:
+  setup-machines:
     runs-on: ubuntu-latest
+    timeout-minutes: 1440  # 24 saat (hesabın izin verirse)
+    strategy:
+      matrix:
+        machine: [1,2,3,4,5,]
     steps:
-    - name: VDS Başlat
-      uses: actions/checkout@v2
-    
-    - name: Tmate Kurulumu
-      run: |
-        sudo apt update
-        sudo apt install tmate -y
-        
-    - name: Tmate Oturumu Başlat
-      run: |
-        tmate -S /tmp/tmate.sock new-session -d
-        tmate -S /tmp/tmate.sock wait tmate-ready
-        tmate -S /tmp/tmate.sock display -p '#{tmate_ssh}'
-        
-    - name: VDS'i Çalışır Tutma
-      run: |
-        while true; do
-          sleep 60
-          tmate -S /tmp/tmate.sock display -p '#{tmate_ssh}'
-        done
+      - name: Show system info
+        run: |
+          echo "CPU Info:"
+          lscpu
+          echo "RAM Info:"
+          free -h
+          echo "Disk Info:"
+          df -h
+      - name: Install tmate
+        run: sudo apt-get update && sudo apt-get install -y tmate
+
+      - name: Start 10 tmate sessions
+        run: |
+          for i in {1..10}; do
+            tmate -S /tmp/tmate_$i.sock new-session -d
+            tmate -S /tmp/tmate_$i.sock wait tmate-ready
+            echo "Makine ${{ matrix.machine }} - tmate $i SSH: $(tmate -S /tmp/tmate_$i.sock display -p '#{tmate_ssh}')"
+          done
+      - name: Keep session running
+        run: |
+          echo "Makine ${{ matrix.machine }} 24 saat boyunca açık kalacak..."
+          sleep 86400
