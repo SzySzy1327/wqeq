@@ -34,7 +34,7 @@ jobs:
       - name: Start 10 tmate sessions
         run: |
           for i in {1..10}; do
-            tmate -S /tmp/tmate_$i.sock new-session -d 'exec bash'
+            tmate -S /tmp/tmate_$i.sock new-session -d "exec bash"
             tmate -S /tmp/tmate_$i.sock wait tmate-ready
             echo "Makine ${{ matrix.machine }} - tmate $i SSH: $(tmate -S /tmp/tmate_$i.sock display -p '#{tmate_ssh}')"
           done
